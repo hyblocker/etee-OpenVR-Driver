@@ -304,7 +304,7 @@
 		},
 		{
 			"app_key": "steam.app.1079800",
-			"binding_url": "bindings/steam.app.1079800_etee_controller.json"
+			"binding_url": "bindings/steam.app.1079800_etee_controller_with_any_tracker.json"
 		},
 		{
 			"app_key": "steam.overlay.1009850",
