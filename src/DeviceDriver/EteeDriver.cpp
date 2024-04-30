@@ -426,10 +426,10 @@ HapticEventData EteeDeviceDriver::OnHapticEvent(const vr::VREvent_HapticVibratio
   const float duration = std::clamp(hapticEvent.fDurationSeconds, 0.f, 10.f);
   float frequency = std::clamp(hapticEvent.fFrequency, 1000000.f / 65535.f, 1000000.f / 300.f);
   float amplitude = std::clamp(hapticEvent.fAmplitude, 0.f, 1.f);
-  DebugDriverLog("Received haptic vibration: freq: %f amp: %f dur: %f", frequency, amplitude, duration);
+  //DebugDriverLog("Received haptic vibration: freq: %f amp: %f dur: %f", frequency, amplitude, duration);
 
   frequency = 170.0f;
-  DebugDriverLog("Mapped haptic vibration: freq: %f amp: %f dur: %f", frequency, amplitude, duration);
+  //DebugDriverLog("Mapped haptic vibration: freq: %f amp: %f dur: %f", frequency, amplitude, duration);
 
   if (duration < 0.f) {
     const int onDurationUs = (int)(amplitude * 4000.f);
@@ -457,7 +457,7 @@ HapticEventData EteeDeviceDriver::OnHapticEvent(const vr::VREvent_HapticVibratio
 
   if (onDurationUs < minimumOnDurationUs) {
     dutyCycle = minimumPercentageFactor / amplitude;
-    DebugDriverLog("New duty cycle: %f", dutyCycle);
+    //DebugDriverLog("New duty cycle: %f", dutyCycle);
 
     maxPulseDurationSeconds = std::min(0.003999f, dutyCycle * periodSeconds);
     onDurationSeconds = Lerp(0.000080f, maxPulseDurationSeconds, amplitude);
