@@ -24,6 +24,7 @@ const char* c_eteeTrackerControllerType =
 // - Note 3: This does not interfere with non-hand tracking (e.g. body tracking, etc)
 const char* c_viveTrackerControllerType = "vive_tracker";
 const char* c_viveTrackerHandedControllerType = "vive_tracker_handed";
+const char* c_viveUltimateTrackerControllerType = "vive_ultimate_tracker";
 
 const char* c_viveTrackerManufacturer = "HTC";
 const char* c_tundraTrackerManufacturer = "Tundra Labs";
@@ -75,7 +76,7 @@ void ControllerPose::DiscoverTrackedDevice() {
     }
 
     // If it's a third-party tracker
-    else if (manufacturer != c_eteeTrackerManufacturer && (deviceType == c_viveTrackerControllerType || deviceType == c_viveTrackerHandedControllerType)) {
+    else if (manufacturer != c_eteeTrackerManufacturer && (deviceType == c_viveTrackerControllerType || deviceType == c_viveTrackerHandedControllerType || deviceType == c_viveUltimateTrackerControllerType)) {
       DriverLog(
           "Identified a %s 3rd-party tracker with handed role. Manufacturer: %s - Controller Type: %s",
           isRightHand ? "right" : "left",
@@ -88,29 +89,42 @@ void ControllerPose::DiscoverTrackedDevice() {
       bool adaptorConnection = isRightHand ? m_adaptorConnRight : m_adaptorConnLeft;
       DriverLog("Adaptor Connection for %s hand: %s", isRightHand ? "right" : "left", adaptorConnection ? "true" : "false");
 
-      // Identifying if it's a VIVE tracker
+      // Identifying if it's a VIVE 2.0 or 3.0 tracker
       if (manufacturer == c_viveTrackerManufacturer) {
-        if (adaptorConnection) {
-          DriverLog("VIVE tracker (Smart Adaptor) offsets applied to controller rendermodel.");
+          if (adaptorConnection) {
+            DriverLog("VIVE tracker (Smart Adaptor) offsets applied to controller rendermodel.");
 
-          newOffsetXPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "x_offset_position");
-          newOffsetYPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "y_offset_position");
-          newOffsetZPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "z_offset_position");
+            newOffsetXPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "x_offset_position");
+            newOffsetYPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "y_offset_position");
+            newOffsetZPos = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "z_offset_position");
 
-          newOffsetXRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "x_offset_rotation");
-          newOffsetYRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "y_offset_rotation");
-          newOffsetZRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "z_offset_rotation");
-        } else {
-          DriverLog("VIVE tracker (Basic Adaptor) offsets applied to controller rendermodel.");
+            newOffsetXRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "x_offset_rotation");
+            newOffsetYRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "y_offset_rotation");
+            newOffsetZRot = vr::VRSettings()->GetFloat("vive_tracker_smart_adaptor_pose_settings", "z_offset_rotation");
+          } else {
+            DriverLog("VIVE tracker (Basic Adaptor) offsets applied to controller rendermodel.");
 
-          newOffsetXPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
-          newOffsetYPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
-          newOffsetZPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
+            newOffsetXPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
+            newOffsetYPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
+            newOffsetZPos = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
 
-          newOffsetXRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
-          newOffsetYRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
-          newOffsetZRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
-        }
+            newOffsetXRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
+            newOffsetYRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
+            newOffsetZRot = vr::VRSettings()->GetFloat("vive_tracker_basic_adaptor_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
+          }
+      }
+
+      // Identifying if it's a VIVE Ultimate Tracker
+      if (deviceType == c_viveUltimateTrackerControllerType) {
+          DriverLog("VIVE Ultimate Tracker (Smart Adaptor) offsets applied to controller rendermodel.");
+
+          newOffsetXPos = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "x_offset_position");
+          newOffsetYPos = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "y_offset_position");
+          newOffsetZPos = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "z_offset_position");
+
+          newOffsetXRot = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "x_offset_rotation");
+          newOffsetYRot = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "y_offset_rotation");
+          newOffsetZRot = vr::VRSettings()->GetFloat("vive_ultimate_tracker_smart_adaptor_pose_settings", "z_offset_rotation");
       }
 
       // Identifying if it's a Tundra tracker
