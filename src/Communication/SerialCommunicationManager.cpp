@@ -4,6 +4,8 @@
 #include <chrono>
 
 #include "Util/DriverLog.h"
+#include <string.h>
+#include <stdio.h>
 
 static const std::string c_serialDeviceId = "VID_239A&PID_8029";
 static const uint32_t c_listenerWaitTime = 1000;
@@ -43,7 +45,19 @@ int SerialCommunicationManager::GetComPort() {
             sizeof(szBuffer),  // The size, in bytes
             &dwSize)) {
       HKEY hDeviceRegistryKey;
-      if (std::string(szBuffer).find(c_serialDeviceId) == std::string::npos) continue;
+
+      // Convert szBuffer to string
+      char szBufferStr[(sizeof szBuffer) + 1];
+      memcpy(szBufferStr, szBuffer, sizeof szBuffer);
+      szBufferStr[sizeof szBuffer] = 0;
+
+      // eteeDongle filtering: Check if the dongle VID or PID are in the device description
+      if (std::string(szBuffer).find(c_serialDeviceId) == std::string::npos) {
+        DebugDriverLog("Serial Device: %s -> Not an eteeDongle!", szBufferStr);
+        continue;
+      } else {
+        DebugDriverLog("Serial Device: %s -> It's an eteeDongle!", szBufferStr);
+      }
       hDeviceRegistryKey = SetupDiOpenDevRegKey(DeviceInfoSet, &DeviceInfoData, DICS_FLAG_GLOBAL, 0, DIREG_DEV, KEY_READ);
       if (hDeviceRegistryKey == INVALID_HANDLE_VALUE) {
         Error = GetLastError();
