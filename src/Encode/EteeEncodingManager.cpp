@@ -33,12 +33,16 @@ static T GetDataSigned(const char* input, int bytePosition, int bitPosition, int
 
 static const short packetSize = 25;
 
-
 VRCommInputData_t EteeEncodingManager::DecodeInputPacket(const std::string& in) {
-  if (in.size() < packetSize) {
+
+  int inputSize = static_cast<int>(in.size());
+  std::string inputSizeString = std::to_string(inputSize);
+  DebugDriverLog("Data packet size: %i", in.size());
+  
+  if (in.size() < packetSize || in.size() > packetSize) {
     VRCommInputData_t commData(false);
     return commData;
-  }
+  } 
 
   std::string input = in.substr(in.length() - packetSize);
   const char* c_input = input.c_str();
