@@ -409,6 +409,10 @@
 		{
 			"app_key": "steam.app.400940",
 			"binding_url": "bindings/steam.app.400940_etee_controller_with_any_tracker.json"
+		},
+		{
+			"app_key": "steam.app.448280",
+			"binding_url": "bindings/steam.app.448280_etee_controller_with_any_tracker.json"
 		}
 	]
 }
