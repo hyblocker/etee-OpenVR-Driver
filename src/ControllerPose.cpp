@@ -51,32 +51,12 @@ void ControllerPose::DiscoverTrackedDevice() {
     if (foundRole != m_configuration.role) continue;     // make sure we're targeting the right role
 
     bool isRightHand = foundRole == vr::TrackedControllerRole_RightHand;
+   
+    // If it's an eteeTracker - will go through SetShadowEteeTracker function
 
-    // If it's an eteeTracker
-    if (manufacturer == c_eteeTrackerManufacturer && deviceType == c_eteeTrackerControllerType) {
-      DriverLog(
-          "Identified a handed etee tracker! Hand: %s Setting controller to use corresponding tracker but will be overriden if tracker connects to a controller",
-          isRightHand ? "right" : "left");
-
-      float newOffsetXPos, newOffsetYPos, newOffsetZPos = 0.0f;
-      float newOffsetXRot, newOffsetYRot, newOffsetZRot = 0.0f;
-
-      newOffsetXPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
-      newOffsetYPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
-      newOffsetZPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
-
-      newOffsetXRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
-      newOffsetYRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
-      newOffsetZRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
-
-      m_configuration.offsetVector = {newOffsetXPos, newOffsetYPos, newOffsetZPos};
-      m_configuration.angleOffsetQuaternion = EulerToQuaternion(DegToRad(newOffsetXRot), DegToRad(newOffsetYRot), DegToRad(newOffsetZRot));
-      m_trackerIsEteeTracker = true;
-      m_eteeTrackerThruRole = false;
-    }
 
     // If it's a third-party tracker
-    else if (manufacturer != c_eteeTrackerManufacturer && (deviceType == c_viveTrackerControllerType || deviceType == c_viveTrackerHandedControllerType || deviceType == c_viveUltimateTrackerControllerType)) {
+    if (manufacturer != c_eteeTrackerManufacturer && (deviceType == c_viveTrackerControllerType || deviceType == c_viveTrackerHandedControllerType || deviceType == c_viveUltimateTrackerControllerType)) {
       DriverLog(
           "Identified a %s 3rd-party tracker with handed role. Manufacturer: %s - Controller Type: %s",
           isRightHand ? "right" : "left",
@@ -271,24 +251,41 @@ void ControllerPose::SetShadowEteeTracker(short deviceId, bool isRightHand) {
   if (m_eteeTrackerConnected == deviceId) return;
 
   DriverLog("Setting pose to that of connected etee tracker with id: %i and hand: %s", deviceId, isRightHand ? "right" : "left");
-
   float newOffsetXPos, newOffsetYPos, newOffsetZPos = 0.0f;
-  newOffsetXPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
-  newOffsetYPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
-  newOffsetZPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
-
   float newOffsetXRot, newOffsetYRot, newOffsetZRot = 0.0f;
-  newOffsetXRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
-  newOffsetYRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
-  newOffsetZRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
+  DriverLog("Identified a handed etee tracker! Hand: %s Setting controller to use corresponding tracker but will be overridden if tracker connects to a controller",isRightHand ? "right" : "left");
+
+  bool adaptorConnection = isRightHand ? m_adaptorConnRight : m_adaptorConnLeft;
+
+  // Backhand offset toggle
+  const bool backHandPosition = vr::VRSettings()->GetBool("etee_backhand_offset", "enabled");
 
   DebugDriverLog("Offsets applied: %s", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
+  DebugDriverLog("Backhand position is: %s", backHandPosition ? "active" : "inactive");
+
+  // If using back of hand tracker position
+  if (backHandPosition == true) {
+    newOffsetXPos = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
+    newOffsetYPos = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
+    newOffsetZPos = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
+
+    newOffsetXRot = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
+    newOffsetYRot = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
+    newOffsetZRot = vr::VRSettings()->GetFloat("etee_back_tracker_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
+
+  } else {  // If using default tracker position
+    newOffsetXPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_position" : "left_x_offset_position");
+    newOffsetYPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_position" : "left_y_offset_position");
+    newOffsetZPos = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_position" : "left_z_offset_position");
+
+    newOffsetXRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_x_offset_rotation" : "left_x_offset_rotation");
+    newOffsetYRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_y_offset_rotation" : "left_y_offset_rotation");
+    newOffsetZRot = vr::VRSettings()->GetFloat("etee_tracker_pose_settings", isRightHand ? "right_z_offset_rotation" : "left_z_offset_rotation");
+  }
   m_configuration.offsetVector = {newOffsetXPos, newOffsetYPos, newOffsetZPos};
   m_configuration.angleOffsetQuaternion = EulerToQuaternion(DegToRad(newOffsetXRot), DegToRad(newOffsetYRot), DegToRad(newOffsetZRot));
-
-  m_shadowTrackerId = deviceId;
-
   m_trackerIsEteeTracker = true;
   m_eteeTrackerThruRole = false;
+  m_shadowTrackerId = deviceId;
   m_eteeTrackerConnected = true;
 }
