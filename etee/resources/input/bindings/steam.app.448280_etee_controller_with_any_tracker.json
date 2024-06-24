@@ -305,8 +305,8 @@
                },
                "mode" : "grab",
                "parameters" : {
-                  "value_hold_threshold" : "0.65",
-                  "value_release_threshold" : "0.4"
+                  "value_hold_threshold" : "0.55",
+                  "value_release_threshold" : "0.35"
                },
                "path" : "/user/hand/left/input/grip"
             },
@@ -318,8 +318,8 @@
                },
                "mode" : "grab",
                "parameters" : {
-                  "value_hold_threshold" : "0.65",
-                  "value_release_threshold" : "0.4"
+                  "value_hold_threshold" : "0.55",
+                  "value_release_threshold" : "0.35"
                },
                "path" : "/user/hand/right/input/grip"
             },
@@ -361,9 +361,9 @@
    },
    "category" : "steamvr_input",
    "controller_type" : "etee_controller",
-   "description" : "Version 3_1: Official Job Simulator bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
+   "description" : "Official TG0 bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
    "interaction_profile" : "",
-   "name" : "Default Job Simulator configuration for etee Controller [ANY TRACKER]",
+   "name" : "[ANY TRACKER] Default Job Simulator configuration for etee Controller V3_2",
    "options" : {
       "compatibility_mode" : true,
       "simulate_hmd" : true,

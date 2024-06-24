@@ -4,22 +4,7 @@
    "app_key" : "steam.app.843390",
    "bindings" : {
       "/actions/default" : {
-         "chords" : [
-            {
-               "inputs" : [
-                  [ "/user/hand/left/input/slider_up", "click" ],
-                  [ "/user/hand/left/input/pinch", "single" ]
-               ],
-               "output" : "/actions/default/in/teleport"
-            },
-            {
-               "inputs" : [
-                  [ "/user/hand/right/input/point_independent", "click" ],
-                  [ "/user/hand/right/input/slider_up", "single" ]
-               ],
-               "output" : "/actions/default/in/teleport"
-            }
-         ],
+         "chords" : [],
          "haptics" : [
             {
                "output" : "/actions/default/out/haptic",
@@ -218,7 +203,7 @@
                },
                "mode" : "dpad",
                "parameters" : {
-                  "deadzone_pct" : "65",
+                  "deadzone_pct" : "70",
                   "overlap_pct" : "5",
                   "sub_mode" : "click"
                },
@@ -261,14 +246,13 @@
                "path" : "/user/hand/right/input/pinch"
             },
             {
-               "inputs" : {},
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/teleport"
+                  }
+               },
                "mode" : "button",
                "path" : "/user/hand/left/input/point_independent"
-            },
-            {
-               "inputs" : {},
-               "mode" : "button",
-               "path" : "/user/hand/right/input/point_independent"
             },
             {
                "inputs" : {
@@ -284,7 +268,7 @@
                   "click" : {
                      "output" : "/actions/default/in/reload"
                   },
-                  "double" : {
+                  "long" : {
                      "output" : "/actions/default/in/switchweapon"
                   }
                },
@@ -316,6 +300,9 @@
                   }
                },
                "mode" : "trackpad",
+               "parameters" : {
+                  "deadzone_pct" : "70"
+               },
                "path" : "/user/hand/right/input/thumbpad"
             },
             {
@@ -370,9 +357,9 @@
    },
    "category" : "steamvr_input",
    "controller_type" : "etee_controller",
-   "description" : "Official TG0 Dashboard bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
+   "description" : "Official TG0 bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
    "interaction_profile" : "",
-   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Right-Hand) V1_0",
+   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Right-Handed) V1_1",
    "options" : {
       "compatibility_mode" : true,
       "simulate_hmd" : true,
