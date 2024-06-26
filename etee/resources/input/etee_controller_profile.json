@@ -416,7 +416,19 @@
 		},
 		{
 			"app_key": "steam.app.843390",
-			"binding_url": "bindings/steam.app.843390_etee_controller_with_any_tracker.json"
+			"binding_url": "bindings/steam.app.843390_etee_controller_with_any_tracker_righthand_locomotion.json"
+		},
+		{
+			"app_key": "steam.app.843390",
+			"binding_url": "bindings/steam.app.843390_etee_controller_with_any_tracker_righthand_teleport.json"
+		},
+		{
+			"app_key": "steam.app.843390",
+			"binding_url": "bindings/steam.app.843390_etee_controller_with_any_tracker_lefthand_locomotion.json"
+		},
+		{
+			"app_key": "steam.app.843390",
+			"binding_url": "bindings/steam.app.843390_etee_controller_with_any_tracker_lefthand_teleport.json"
 		}
 	]
 }

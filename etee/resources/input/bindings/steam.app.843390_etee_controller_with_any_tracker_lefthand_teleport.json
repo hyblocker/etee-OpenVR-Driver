@@ -8,47 +8,47 @@
          "haptics" : [
             {
                "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/left/output/haptic"
+               "path" : "/user/hand/right/output/haptic"
             },
             {
                "output" : "/actions/default/out/haptic",
-               "path" : "/user/hand/right/output/haptic"
+               "path" : "/user/hand/left/output/haptic"
             }
          ],
          "poses" : [
             {
                "output" : "none",
-               "path" : "/user/hand/left/pose/raw"
-            },
-            {
-               "output" : "none",
                "path" : "/user/hand/right/pose/raw"
             },
             {
-               "output" : "/actions/default/in/pose",
-               "path" : "/user/hand/left/pose/vrchat"
+               "output" : "none",
+               "path" : "/user/hand/left/pose/raw"
             },
             {
                "output" : "/actions/default/in/pose",
                "path" : "/user/hand/right/pose/vrchat"
             },
             {
-               "output" : "none",
-               "path" : "/user/hand/left/pose/base"
+               "output" : "/actions/default/in/pose",
+               "path" : "/user/hand/left/pose/vrchat"
             },
             {
                "output" : "none",
                "path" : "/user/hand/right/pose/base"
+            },
+            {
+               "output" : "none",
+               "path" : "/user/hand/left/pose/base"
             }
          ],
          "skeleton" : [
             {
-               "output" : "/actions/default/in/skeletonlefthand",
-               "path" : "/user/hand/left/input/skeleton/left"
-            },
-            {
                "output" : "/actions/default/in/skeletonrighthand",
                "path" : "/user/hand/right/input/skeleton/right"
+            },
+            {
+               "output" : "/actions/default/in/skeletonlefthand",
+               "path" : "/user/hand/left/input/skeleton/left"
             }
          ],
          "sources" : [
@@ -59,7 +59,7 @@
                   }
                },
                "mode" : "grab",
-               "path" : "/user/hand/left/input/grip"
+               "path" : "/user/hand/right/input/grip"
             },
             {
                "inputs" : {
@@ -73,7 +73,7 @@
                   "haptic_amplitude" : "0",
                   "haptic_duration" : "0"
                },
-               "path" : "/user/hand/left/input/pinch"
+               "path" : "/user/hand/right/input/pinch"
             },
             {
                "inputs" : {
@@ -82,7 +82,7 @@
                   }
                },
                "mode" : "trackpad",
-               "path" : "/user/hand/left/input/thumbpad"
+               "path" : "/user/hand/right/input/thumbpad"
             },
             {
                "inputs" : {
@@ -94,7 +94,7 @@
                "parameters" : {
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/left/input/slider_up"
+               "path" : "/user/hand/right/input/slider_up"
             },
             {
                "inputs" : {
@@ -103,7 +103,7 @@
                   }
                },
                "mode" : "force_sensor",
-               "path" : "/user/hand/left/input/grip"
+               "path" : "/user/hand/right/input/grip"
             },
             {
                "inputs" : {
@@ -115,7 +115,7 @@
                "parameters" : {
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/left/input/pinch"
+               "path" : "/user/hand/right/input/pinch"
             },
             {
                "inputs" : {
@@ -129,7 +129,48 @@
                   "click_deactivate_threshold" : "0.05",
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/left/input/pinch"
+               "path" : "/user/hand/right/input/pinch"
+            },
+            {
+               "inputs" : {
+                  "click" : {
+                     "output" : "/actions/default/in/squeezegrab"
+                  }
+               },
+               "mode" : "button",
+               "parameters" : {
+                  "click_deactivate_threshold" : "0.15",
+                  "force_input" : "force",
+                  "haptic_amplitude" : "0"
+               },
+               "path" : "/user/hand/right/input/grip"
+            },
+            {
+               "inputs" : {
+                  "double" : {
+                     "output" : "/actions/default/in/jump"
+                  }
+               },
+               "mode" : "button",
+               "path" : "/user/hand/left/input/slider_up"
+            },
+            {
+               "inputs" : {
+                  "grab" : {
+                     "output" : "/actions/default/in/grabgrip"
+                  }
+               },
+               "mode" : "grab",
+               "path" : "/user/hand/left/input/grip"
+            },
+            {
+               "inputs" : {
+                  "force" : {
+                     "output" : "/actions/default/in/squish"
+                  }
+               },
+               "mode" : "force_sensor",
+               "path" : "/user/hand/left/input/grip"
             },
             {
                "inputs" : {
@@ -144,47 +185,6 @@
                   "haptic_amplitude" : "0"
                },
                "path" : "/user/hand/left/input/grip"
-            },
-            {
-               "inputs" : {
-                  "double" : {
-                     "output" : "/actions/default/in/jump"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/right/input/slider_up"
-            },
-            {
-               "inputs" : {
-                  "grab" : {
-                     "output" : "/actions/default/in/grabgrip"
-                  }
-               },
-               "mode" : "grab",
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
-                  "force" : {
-                     "output" : "/actions/default/in/squish"
-                  }
-               },
-               "mode" : "force_sensor",
-               "path" : "/user/hand/right/input/grip"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/squeezegrab"
-                  }
-               },
-               "mode" : "button",
-               "parameters" : {
-                  "click_deactivate_threshold" : "0.15",
-                  "force_input" : "force",
-                  "haptic_amplitude" : "0"
-               },
-               "path" : "/user/hand/right/input/grip"
             },
             {
                "inputs" : {
@@ -207,7 +207,7 @@
                   "overlap_pct" : "5",
                   "sub_mode" : "click"
                },
-               "path" : "/user/hand/right/input/thumbpad"
+               "path" : "/user/hand/left/input/thumbpad"
             },
             {
                "inputs" : {
@@ -219,7 +219,7 @@
                "parameters" : {
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/right/input/pinch"
+               "path" : "/user/hand/left/input/pinch"
             },
             {
                "inputs" : {
@@ -231,7 +231,7 @@
                "parameters" : {
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/right/input/pinch"
+               "path" : "/user/hand/left/input/pinch"
             },
             {
                "inputs" : {
@@ -243,16 +243,7 @@
                "parameters" : {
                   "haptic_amplitude" : "0"
                },
-               "path" : "/user/hand/right/input/pinch"
-            },
-            {
-               "inputs" : {
-                  "click" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "button",
-               "path" : "/user/hand/left/input/point_independent"
+               "path" : "/user/hand/left/input/pinch"
             },
             {
                "inputs" : {
@@ -261,7 +252,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/left/input/proximity"
+               "path" : "/user/hand/right/input/proximity"
             },
             {
                "inputs" : {
@@ -273,16 +264,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/right/input/proximity"
-            },
-            {
-               "inputs" : {
-                  "pull" : {
-                     "output" : "/actions/default/in/visualtrigger"
-                  }
-               },
-               "mode" : "trigger",
-               "path" : "/user/hand/left/input/finger/index"
+               "path" : "/user/hand/left/input/proximity"
             },
             {
                "inputs" : {
@@ -295,15 +277,24 @@
             },
             {
                "inputs" : {
-                  "position" : {
-                     "output" : "/actions/default/in/smoothturn"
+                  "pull" : {
+                     "output" : "/actions/default/in/visualtrigger"
                   }
                },
-               "mode" : "trackpad",
+               "mode" : "trigger",
+               "path" : "/user/hand/left/input/finger/index"
+            },
+            {
+               "inputs" : {
+                  "north" : {
+                     "output" : "/actions/default/in/teleport"
+                  }
+               },
+               "mode" : "dpad",
                "parameters" : {
-                  "deadzone_pct" : "70"
+                  "sub_mode" : "click"
                },
-               "path" : "/user/hand/right/input/thumbpad"
+               "path" : "/user/hand/left/input/thumbpad"
             },
             {
                "inputs" : {
@@ -312,7 +303,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/right/input/grip"
+               "path" : "/user/hand/left/input/grip"
             },
             {
                "inputs" : {
@@ -321,7 +312,7 @@
                   }
                },
                "mode" : "button",
-               "path" : "/user/hand/left/input/pinch"
+               "path" : "/user/hand/right/input/pinch"
             },
             {
                "inputs" : {
@@ -336,7 +327,7 @@
                   "force_input" : "value",
                   "haptic_amplitude" : "0.4"
                },
-               "path" : "/user/hand/right/input/finger/index"
+               "path" : "/user/hand/left/input/finger/index"
             },
             {
                "inputs" : {
@@ -350,7 +341,36 @@
                   "click_deactivate_threshold" : "0.7",
                   "haptic_amplitude" : "0.4"
                },
-               "path" : "/user/hand/left/input/finger/index"
+               "path" : "/user/hand/right/input/finger/index"
+            },
+            {
+               "inputs" : {
+                  "north" : {
+                     "output" : "/actions/default/in/teleport"
+                  }
+               },
+               "mode" : "dpad",
+               "parameters" : {
+                  "sub_mode" : "click"
+               },
+               "path" : "/user/hand/right/input/thumbpad"
+            },
+            {
+               "inputs" : {},
+               "mode" : "force_sensor",
+               "path" : "/user/hand/left/input/thumbpad"
+            },
+            {
+               "inputs" : {
+                  "position" : {
+                     "output" : "/actions/default/in/smoothturn"
+                  }
+               },
+               "mode" : "trackpad",
+               "parameters" : {
+                  "deadzone_pct" : "45"
+               },
+               "path" : "/user/hand/left/input/thumbpad"
             }
          ]
       }
@@ -359,7 +379,7 @@
    "controller_type" : "etee_controller",
    "description" : "Official TG0 bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
    "interaction_profile" : "",
-   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Right-Handed) V1_1",
+   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Left-Handed - Teleport) V1_2",
    "options" : {
       "compatibility_mode" : true,
       "simulate_hmd" : true,
