@@ -286,18 +286,6 @@
             },
             {
                "inputs" : {
-                  "north" : {
-                     "output" : "/actions/default/in/teleport"
-                  }
-               },
-               "mode" : "dpad",
-               "parameters" : {
-                  "sub_mode" : "click"
-               },
-               "path" : "/user/hand/right/input/thumbpad"
-            },
-            {
-               "inputs" : {
                   "click" : {
                      "output" : "/actions/default/in/grabpinch"
                   }
@@ -367,7 +355,7 @@
    "controller_type" : "etee_controller",
    "description" : "Official TG0 bindings for etee Controllers. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
    "interaction_profile" : "",
-   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Right-Handed - Smooth Locomotion) V1_2",
+   "name" : "[ANY TRACKER] Default Vertigo 2 configuration for etee Controller (Right-Handed - Smooth Locomotion) V1_3",
    "options" : {
       "compatibility_mode" : true,
       "simulate_hmd" : true,
