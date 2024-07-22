@@ -11,6 +11,18 @@
 
 const short NUM_BONES = static_cast<short>(HandSkeletonBone::_Count);
 
+struct TrackpadFrameData {
+ public:
+  float leftRight;
+  float upDown;
+};
+
+struct TrackpadFrame {
+ public:
+  TrackpadFrameData frameData;
+  float interp;
+};
+
 class BoneAnimator {
  public:
   explicit BoneAnimator(const std::string& curlAnimFileName, const std::string& accessoryAnimFileName);
@@ -19,7 +31,7 @@ class BoneAnimator {
   void LoadGripLimitSkeletonByHand(vr::VRBoneTransform_t* skeleton, const bool rightHand);
   float RemapValue(float low1, float high1, float low2, float high2, float value1);
   float RemapCurl(float pull, float force, float pullThreshold);
-  std::pair<std::pair<int, int>, float> TrackpadFindFrame(
+  TrackpadFrame TrackpadFindFrame(
       float x, float y, float norm_x, float norm_y, float lowerCenterThreshold, float upperCenterThreshold, bool trackpadClick, bool isRightHand);
 
  private:

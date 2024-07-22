@@ -17,15 +17,15 @@ static const std::array<float, 3> emptyTranslation = {0.0f, 0.0f, 0.0f};
 // Poses for right hand
 static struct accessoryAnimConfig {
   // left->right up->down
-  std::pair<int, int> thumbpadX;
-  std::pair<int, int> thumbpadY;
+  TrackpadFrameData thumbpadX;
+  TrackpadFrameData thumbpadY;
 
-  std::pair<int, int> thumbpad_NW_SW;
-  std::pair<int, int> thumbpad_NE_SE;
-  std::pair<int, int> thumbpad_NW_NE;
-  std::pair<int, int> thumbpad_SW_SE;
-  std::pair<int, int> slider;
-  std::pair<int, int> proximity;
+  TrackpadFrameData thumbpad_NW_SW;
+  TrackpadFrameData thumbpad_NE_SE;
+  TrackpadFrameData thumbpad_NW_NE;
+  TrackpadFrameData thumbpad_SW_SE;
+  TrackpadFrameData slider;
+  TrackpadFrameData proximity;
 };
 
 static accessoryAnimConfig AccessoryAnimConfig = {
@@ -196,16 +196,17 @@ void BoneAnimator::ComputeSkeletonTransforms(vr::VRBoneTransform_t* skeleton, co
 
       // ------------------------------- Trackpad Touch/Clicked -------------------------------
       if (finger == FingerIndex::Thumb && inputData.thumbpad.touch) {
-        std::pair<std::pair<int, int>, float> trackpadAnimation =
+        TrackpadFrame trackpadAnimation =
             TrackpadFindFrame(x, y, norm_x, norm_y, lowerCenterThreshold, upperCenterThreshold, inputData.thumbpad.touch, inputData.isRight);
-        AnimationData animationData = accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, trackpadAnimation.first.first, trackpadAnimation.first.second);
-        ApplyTransformForBone(skeleton[i], boneIndex, animationData, trackpadAnimation.second, inputData.isRight);
+        AnimationData animationData =
+            accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, trackpadAnimation.frameData.leftRight, trackpadAnimation.frameData.upDown);
+        ApplyTransformForBone(skeleton[i], boneIndex, animationData, trackpadAnimation.interp, inputData.isRight);
       }
 
       // ------------------------------- Tracker proximity animations -------------------------------
       if (finger == FingerIndex::Thumb && inputData.proximity.value > proximityValThreshold) {
         AnimationData animationData =
-            accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, AccessoryAnimConfig.proximity.first, AccessoryAnimConfig.proximity.second);
+            accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, AccessoryAnimConfig.proximity.leftRight, AccessoryAnimConfig.proximity.upDown);
         ApplyTransformForBone(skeleton[i], boneIndex, animationData, inputData.proximity.value, inputData.isRight);
       }
 
@@ -214,7 +215,7 @@ void BoneAnimator::ComputeSkeletonTransforms(vr::VRBoneTransform_t* skeleton, co
       if (finger == FingerIndex::Thumb && inputData.slider.touch && !inputData.gesture.gripTouch &&
           inputData.fingers[0].pull < 0.2f && !inputData.proximity.touch && !inputData.thumbpad.touch) {
          AnimationData animationData;
-         animationData = accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, AccessoryAnimConfig.slider.first, AccessoryAnimConfig.slider.second);
+         animationData = accessoryModelManager_->GetAnimationDataByKeyframes(boneIndex, AccessoryAnimConfig.slider.leftRight, AccessoryAnimConfig.slider.upDown);
          ApplyTransformForBone(skeleton[i], boneIndex, animationData, norm_slider, inputData.isRight);
        }
       */
@@ -290,115 +291,113 @@ float BoneAnimator::RemapCurl(float pull, float force, float touchThreshold) {
   return curlVal;
 }
 
-std::pair<std::pair<int, int>, float> BoneAnimator::TrackpadFindFrame(
+TrackpadFrame BoneAnimator::TrackpadFindFrame(
     float x, float y, float norm_x, float norm_y, float lowerCenterThreshold, float upperCenterThreshold, bool trackpadTouch, bool isRightHand) {
-  std::pair<int, int> frameData;
-  float interp;
+  TrackpadFrame result = {};
 
   // North - South
   if (norm_x >= lowerCenterThreshold && norm_x <= upperCenterThreshold && std::fabs(x) <= std::fabs(y)) {
     if (trackpadTouch != true) {
-      frameData = AccessoryAnimConfig.thumbpadY;
+      result.frameData = AccessoryAnimConfig.thumbpadY;
     } else {
-      frameData = AccessoryAnimConfig.thumbpadY;
+      result.frameData = AccessoryAnimConfig.thumbpadY;
     }
-    interp = norm_y;
+    result.interp = norm_y;
   }
 
   // West - East
   else if (norm_y >= lowerCenterThreshold && norm_y <= upperCenterThreshold && std::fabs(x) > std::fabs(y)) {
     if (isRightHand) {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpadX;
+        result.frameData = AccessoryAnimConfig.thumbpadX;
       } else {
-        frameData = AccessoryAnimConfig.thumbpadX;
+        result.frameData = AccessoryAnimConfig.thumbpadX;
       }
     } else {
       if (trackpadTouch != true) {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpadX.second, AccessoryAnimConfig.thumbpadX.first);
+        result.frameData = {AccessoryAnimConfig.thumbpadX.upDown, AccessoryAnimConfig.thumbpadX.leftRight};
       } else {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpadX.second, AccessoryAnimConfig.thumbpadX.first);
+        result.frameData = {AccessoryAnimConfig.thumbpadX.upDown, AccessoryAnimConfig.thumbpadX.leftRight};
       }
     }
-    interp = norm_x;
+    result.interp = norm_x;
   }
 
   // North West - South West
   else if (norm_x < lowerCenterThreshold && norm_y > upperCenterThreshold || norm_x < lowerCenterThreshold && norm_y < lowerCenterThreshold) {
     if (isRightHand) {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_NW_SW;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_SW;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_NW_SW;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_SW;
       }
     } else {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_NE_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NE_SE;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_NE_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NE_SE;
       }
     }
     float originalRange = sin(45 * PI / 180) * 2;
-    interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_y);
+    result.interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_y);
   }
 
   // North East - South East
   else if (norm_x > upperCenterThreshold && norm_y > upperCenterThreshold || norm_x > upperCenterThreshold && norm_y < lowerCenterThreshold) {
     if (isRightHand) {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_NE_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NE_SE;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_NE_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NE_SE;
       }
     } else {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_NW_SW;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_SW;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_NW_SW;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_SW;
       }
     }
     float originalRange = sin(45 * PI / 180) * 2;
-    interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_y);
+    result.interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_y);
   }
 
   // North West - North East
   else if (norm_y > upperCenterThreshold && norm_x > upperCenterThreshold || norm_y > upperCenterThreshold && norm_x < lowerCenterThreshold) {
     if (isRightHand) {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_NW_NE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_NE;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_NW_NE;
+        result.frameData = AccessoryAnimConfig.thumbpad_NW_NE;
       }
     } else {
       if (trackpadTouch != true) {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpad_NW_NE.second, AccessoryAnimConfig.thumbpad_NW_NE.first);
-      } else {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpad_NW_NE.second, AccessoryAnimConfig.thumbpad_NW_NE.first);
+        result.frameData = {AccessoryAnimConfig.thumbpad_NW_NE.upDown, AccessoryAnimConfig.thumbpad_NW_NE.leftRight};
+    } else {
+        result.frameData = {AccessoryAnimConfig.thumbpad_NW_NE.upDown, AccessoryAnimConfig.thumbpad_NW_NE.leftRight};
       }
     }
     float originalRange = sin(45 * PI / 180) * 2;
-    interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_x);
+    result.interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_x);
   }
 
   // South West - South East
   else if (norm_y < lowerCenterThreshold && norm_x > upperCenterThreshold || norm_y < lowerCenterThreshold && norm_x < lowerCenterThreshold) {
     if (isRightHand) {
       if (trackpadTouch != true) {
-        frameData = AccessoryAnimConfig.thumbpad_SW_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_SW_SE;
       } else {
-        frameData = AccessoryAnimConfig.thumbpad_SW_SE;
+        result.frameData = AccessoryAnimConfig.thumbpad_SW_SE;
       }
     } else {
       if (trackpadTouch != true) {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpad_SW_SE.second, AccessoryAnimConfig.thumbpad_SW_SE.first);
+        result.frameData = {AccessoryAnimConfig.thumbpad_SW_SE.upDown, AccessoryAnimConfig.thumbpad_SW_SE.leftRight};
       } else {
-        frameData = std::make_pair(AccessoryAnimConfig.thumbpad_SW_SE.second, AccessoryAnimConfig.thumbpad_SW_SE.first);
+        result.frameData = {AccessoryAnimConfig.thumbpad_SW_SE.upDown, AccessoryAnimConfig.thumbpad_SW_SE.leftRight};
       }
     }
     float originalRange = sin(45 * PI / 180) * 2;
-    interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_x);
+    result.interp = RemapValue(0.0f, originalRange, 0.0f, 1.0f, norm_x);
   }
 
-  std::pair<std::pair<int, int>, float> result = std::make_pair(frameData, interp);
   return result;
 }
