@@ -283,7 +283,7 @@
             }
           },
           "mode": "button",
-          "path": "/user/hand/left/input/pinch"
+          "path": "/user/hand/left/input/pinch_thumbfinger"
         },
         {
           "inputs": {
@@ -292,7 +292,7 @@
             }
           },
           "mode": "button",
-          "path": "/user/hand/right/input/pinch"
+          "path": "/user/hand/right/input/pinch_thumbfinger"
         }
       ]
     },
@@ -397,7 +397,7 @@
       "sources": [
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/global/in/menu"
             }
           },
@@ -406,7 +406,7 @@
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/global/in/menu"
             }
           },
@@ -1015,7 +1015,7 @@
       "sources": [
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/main/in/mic"
             }
           },
@@ -1032,6 +1032,9 @@
             }
           },
           "mode": "trackpad",
+          "parameters": {
+            "deadzone_pct": "50"
+          },
           "path": "/user/hand/left/input/thumbpad"
         },
         {
@@ -1044,11 +1047,14 @@
             }
           },
           "mode": "trackpad",
+          "parameters": {
+            "deadzone_pct": "50"
+          },
           "path": "/user/hand/right/input/thumbpad"
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/main/in/jump"
             }
           },
@@ -1057,43 +1063,7 @@
         },
         {
           "inputs": {
-            "click": {
-              "output": "/actions/main/in/interact"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/right/input/pinch"
-        },
-        {
-          "inputs": {
-            "click": {
-              "output": "/actions/main/in/interact"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/left/input/pinch"
-        },
-        {
-          "inputs": {
-            "pull": {
-              "output": "/actions/main/in/trigger_axis"
-            }
-          },
-          "mode": "trigger",
-          "path": "/user/hand/right/input/pinch"
-        },
-        {
-          "inputs": {
-            "pull": {
-              "output": "/actions/main/in/trigger_axis"
-            }
-          },
-          "mode": "trigger",
-          "path": "/user/hand/left/input/pinch"
-        },
-        {
-          "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/main/in/udon_menu"
             }
           },
@@ -1102,7 +1072,7 @@
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/main/in/udon_menu"
             }
           },
@@ -1144,6 +1114,66 @@
           },
           "mode": "trigger",
           "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/main/in/trigger_axis"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/left/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/main/in/interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "pull": {
+              "output": "/actions/main/in/trigger_axis"
+            }
+          },
+          "mode": "trigger",
+          "path": "/user/hand/right/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/main/in/interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "double": {
+              "output": "/actions/main/in/udon_menu"
+            },
+            "long": {
+              "output": "/actions/main/in/action_menu"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/proximity"
+        },
+        {
+          "inputs": {
+            "double": {
+              "output": "/actions/main/in/udon_menu"
+            },
+            "long": {
+              "output": "/actions/main/in/action_menu"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/proximity"
         }
       ]
     },
@@ -1170,24 +1200,6 @@
         {
           "inputs": {
             "click": {
-              "output": "/actions/menu/in/confirm"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/left/input/pinch"
-        },
-        {
-          "inputs": {
-            "click": {
-              "output": "/actions/menu/in/confirm"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/right/input/pinch"
-        },
-        {
-          "inputs": {
-            "click": {
               "output": "/actions/menu/in/drag"
             }
           },
@@ -1202,6 +1214,24 @@
           },
           "mode": "button",
           "path": "/user/hand/right/input/grip"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/menu/in/confirm"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/menu/in/confirm"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/pinch_thumbfinger"
         }
       ]
     },
@@ -1217,6 +1247,9 @@
             }
           },
           "mode": "trackpad",
+          "parameters": {
+            "deadzone_pct": "40"
+          },
           "path": "/user/hand/left/input/thumbpad"
         },
         {
@@ -1229,11 +1262,14 @@
             }
           },
           "mode": "trackpad",
+          "parameters": {
+            "deadzone_pct": "40"
+          },
           "path": "/user/hand/right/input/thumbpad"
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/one_hand/in/jump"
             }
           },
@@ -1242,7 +1278,7 @@
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/one_hand/in/jump"
             }
           },
@@ -1251,24 +1287,6 @@
         },
         {
           "inputs": {
-            "click": {
-              "output": "/actions/one_hand/in/interact"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/left/input/pinch"
-        },
-        {
-          "inputs": {
-            "click": {
-              "output": "/actions/one_hand/in/interact"
-            }
-          },
-          "mode": "button",
-          "path": "/user/hand/right/input/pinch"
-        },
-        {
-          "inputs": {
             "grab": {
               "output": "/actions/one_hand/in/grab"
             }
@@ -1305,7 +1323,7 @@
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/one_hand/in/udon_menu"
             }
           },
@@ -1314,7 +1332,7 @@
         },
         {
           "inputs": {
-            "click": {
+            "double": {
               "output": "/actions/one_hand/in/udon_menu"
             }
           },
@@ -1328,7 +1346,7 @@
             }
           },
           "mode": "trigger",
-          "path": "/user/hand/left/input/pinch"
+          "path": "/user/hand/left/input/pinch_thumbfinger"
         },
         {
           "inputs": {
@@ -1337,16 +1355,34 @@
             }
           },
           "mode": "trigger",
-          "path": "/user/hand/right/input/pinch"
+          "path": "/user/hand/right/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/one_hand/in/interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/left/input/pinch_thumbfinger"
+        },
+        {
+          "inputs": {
+            "click": {
+              "output": "/actions/one_hand/in/interact"
+            }
+          },
+          "mode": "button",
+          "path": "/user/hand/right/input/pinch_thumbfinger"
         }
       ]
     }
   },
   "category": "steamvr_input",
   "controller_type": "etee_controller",
-  "description": "Official VRChat bindings for etee Controllers, ready for SteamVR input 2.0 skeletons. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
+  "description": "Official VRChat bindings for etee Controllers, ready for SteamVR input 2.0 skeletons. Big shoutout to Hykke for making this compatibility possible. While in-game, press the System Button and select 'Show Controls' in the bottom left to view controller layout.",
   "interaction_profile": "",
-  "name": "[RAW POSE - NEW SKELETON] Default VRChat configuration for etee Controller V4_0",
+  "name": "[ALTERNATIVE RAW POSE - NEW SKELETON] Default VRChat configuration for etee Controller V4_1",
   "options": {
     "mirror_actions": false,
     "simulate_hmd": false,
