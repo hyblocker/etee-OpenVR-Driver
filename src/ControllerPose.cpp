@@ -45,7 +45,8 @@ void ControllerPose::DiscoverTrackedDevice() {
     std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::ETrackedDeviceProperty::Prop_ManufacturerName_String);
     std::string deviceType = vr::VRProperties()->GetStringProperty(container, vr::ETrackedDeviceProperty::Prop_ControllerType_String);
 
-    int32_t foundRole = vr::VRProperties()->GetInt32Property(container, vr::ETrackedDeviceProperty::Prop_ControllerRoleHint_Int32);
+    vr::ETrackedControllerRole foundRole =
+        static_cast <vr::ETrackedControllerRole>(vr::VRProperties()->GetInt32Property(container, vr::ETrackedDeviceProperty::Prop_ControllerRoleHint_Int32));
 
     if (manufacturer == c_deviceManufacturer) continue;  // make sure we're not targeting our own controller device
     if (foundRole != m_configuration.role) continue;     // make sure we're targeting the right role
