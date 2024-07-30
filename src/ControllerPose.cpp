@@ -34,6 +34,8 @@ ControllerPose::ControllerPose(VRPoseConfiguration configuration)
       m_shadowTrackerId(-1),
       m_eteeTrackerConnected(false),
       m_eteeTrackerThruRole(false),  // Disable assignment of role through SVR Manage Trackers, use auto-hand-assignment
+      m_adaptorConnLeft(false),
+      m_adaptorConnRight(false),
       m_state(){};
 
 void ControllerPose::DiscoverTrackedDevice() {
