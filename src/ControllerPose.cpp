@@ -29,6 +29,10 @@ const char* c_viveUltimateTrackerControllerType = "vive_ultimate_tracker";
 const char* c_viveTrackerManufacturer = "HTC";
 const char* c_tundraTrackerManufacturer = "Tundra Labs";
 
+// The pimax driver changes the tracking system on all lighthouse devices to 'aapvr'. We can use this to determine if we are running on Pimax drivers, and if so, use special case handling because
+// pimax fucked up input shimming, meaning this driver will get stuck in a weird state because pimax decided to hijack the lighthouse driver. :(
+const char* c_trackingSystemPimax = "aapvr";
+
 ControllerPose::ControllerPose(VRPoseConfiguration configuration)
     : m_configuration(configuration),
       m_shadowTrackerId(-1),
@@ -36,6 +40,7 @@ ControllerPose::ControllerPose(VRPoseConfiguration configuration)
       m_eteeTrackerThruRole(false),  // Disable assignment of role through SVR Manage Trackers, use auto-hand-assignment
       m_adaptorConnLeft(false),
       m_adaptorConnRight(false),
+      m_isConnectedThroughPimaxDriver(false),
       m_state(){};
 
 void ControllerPose::DiscoverTrackedDevice() {
@@ -46,6 +51,7 @@ void ControllerPose::DiscoverTrackedDevice() {
 
     std::string manufacturer = vr::VRProperties()->GetStringProperty(container, vr::ETrackedDeviceProperty::Prop_ManufacturerName_String);
     std::string deviceType = vr::VRProperties()->GetStringProperty(container, vr::ETrackedDeviceProperty::Prop_ControllerType_String);
+    std::string trackingSystem = vr::VRProperties()->GetStringProperty(container, vr::ETrackedDeviceProperty::Prop_TrackingSystemName_String);
 
     vr::ETrackedControllerRole foundRole =
         static_cast <vr::ETrackedControllerRole>(vr::VRProperties()->GetInt32Property(container, vr::ETrackedDeviceProperty::Prop_ControllerRoleHint_Int32));
@@ -76,6 +82,7 @@ void ControllerPose::DiscoverTrackedDevice() {
       m_configuration.angleOffsetQuaternion = EulerToQuaternion(DegToRad(newOffsetXRot), DegToRad(newOffsetYRot), DegToRad(newOffsetZRot));
       m_trackerIsEteeTracker = true;
       m_eteeTrackerThruRole = false;
+      m_isConnectedThroughPimaxDriver = trackingSystem == c_trackingSystemPimax;
     }
 
     // If it's a third-party tracker
@@ -160,6 +167,7 @@ void ControllerPose::DiscoverTrackedDevice() {
       m_configuration.angleOffsetQuaternion = EulerToQuaternion(DegToRad(newOffsetXRot), DegToRad(newOffsetYRot), DegToRad(newOffsetZRot));
       m_trackerIsEteeTracker = false;
       m_eteeTrackerThruRole = true;
+      m_isConnectedThroughPimaxDriver = trackingSystem == c_trackingSystemPimax;
     }
 
     m_shadowTrackerId = i;
@@ -196,8 +204,12 @@ vr::DriverPose_t ControllerPose::UpdatePose() {
   }
    
   if (m_state != VRControllerState::streaming || m_state == VRControllerState::disconnected ||
-      (!m_eteeTrackerConnected && m_trackerIsEteeTracker && !m_eteeTrackerThruRole))
-    return GetStatusPose(); 
+      (!m_eteeTrackerConnected && m_trackerIsEteeTracker && !m_eteeTrackerThruRole)) {
+    if (!m_isConnectedThroughPimaxDriver) {
+        // Pimax fucks up input shimming in their driver so the etee driver will get stuck here. We should ignore it
+        return GetStatusPose(); 
+    }
+  }
 
   pose.deviceIsConnected = m_state != VRControllerState::disconnected;
   pose.poseIsValid = trackerPose.bPoseIsValid;

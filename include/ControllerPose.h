@@ -28,6 +28,7 @@ class ControllerPose {
   std::atomic<bool> m_trackerIsEteeTracker;
   std::atomic<bool> m_eteeTrackerConnected;
   std::atomic<bool> m_eteeTrackerThruRole;
+  std::atomic<bool> m_isConnectedThroughPimaxDriver;
 
   bool m_adaptorConnRight;
   bool m_adaptorConnLeft;
